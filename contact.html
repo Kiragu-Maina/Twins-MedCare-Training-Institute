@@ -12,11 +12,16 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Toastr CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-   
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-     <!-- jQuery -->
+
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -29,9 +34,15 @@
         })();
     </script>
     <script type="text/javascript">
-       window.onload = function () {
+
+        window.onload = function () {
             var form = document.getElementById('contact-form');
             var submitButton = form.querySelector('button[type=submit]');
+            var map = L.map('map').setView([-0.30422, 36.13803], 13);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
 
             form.addEventListener('submit', function (event) {
                 event.preventDefault();
@@ -39,12 +50,12 @@
                 // Add loading class to button
                 submitButton.classList.add('loading');
                 submitButton.disabled = true; // Disable t
-    
+
                 // Get values from the form
                 var user_name = document.getElementsByName('user_name')[0].value;
                 var user_email = document.getElementsByName('user_email')[0].value;
                 var message = document.getElementsByName('message')[0].value;
-    
+
                 // Send the email
                 emailjs.send("service_udpqfch", "template_2cwcs6b", {
                     to_name: "Twins Medcare Institute", // This can be a dynamic value if needed
@@ -62,36 +73,49 @@
 
                     })
                     .finally(() => {
-                // Remove loading class and re-enable button
-                submitButton.classList.remove('loading');
-                submitButton.disabled = false;
-            });
+                        // Remove loading class and re-enable button
+                        submitButton.classList.remove('loading');
+                        submitButton.disabled = false;
+                    });
             });
         }
     </script>
     <style>
         button[type=submit] {
-    background-color: #4CAF50; /* Green background */
-    color: white; /* White text */
-    padding: 15px 20px; /* Padding */
-    border: none; /* No border */
-    border-radius: 4px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
-}
+            background-color: #4CAF50;
+            /* Green background */
+            color: white;
+            /* White text */
+            padding: 15px 20px;
+            /* Padding */
+            border: none;
+            /* No border */
+            border-radius: 4px;
+            /* Rounded corners */
+            cursor: pointer;
+            /* Pointer cursor on hover */
+            transition: background-color 0.3s;
+            /* Smooth transition for hover effect */
+        }
 
-button[type=submit]:hover {
-    background-color: #45a049; /* Darker shade of green on hover */
-}
+        button[type=submit]:hover {
+            background-color: #45a049;
+            /* Darker shade of green on hover */
+        }
 
-/* Style for the loading state */
-button[type=submit].loading {
-    background-color: #ccc; /* Gray background for loading state */
-    cursor: default; /* Default cursor during loading */
-}
+        /* Style for the loading state */
+        button[type=submit].loading {
+            background-color: #ccc;
+            /* Gray background for loading state */
+            cursor: default;
+            /* Default cursor during loading */
+        }
 
+        #map {
+            height: 180px;
+        }
     </style>
-    
+
 
 </head>
 
@@ -119,9 +143,7 @@ button[type=submit].loading {
     <section class="location">
         <h1>Our Location</h1>
         <div class="map">
-            <iframe
-                src="https://www.google.com/maps/place/Lanet/@-0.2959171,36.1440791,17z/data=!3m1!4b1!4m6!3m5!1s0x182993cb24ef029b:0xcd4a03cc7376363b!8m2!3d-0.2959171!4d36.1440791!16s%2Fg%2F11q9d99nv6?entry=ttu"
-                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <div id="map"></div>
         </div>
     </section>
 
