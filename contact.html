@@ -29,9 +29,16 @@
         })();
     </script>
     <script type="text/javascript">
-        window.onload = function () {
-            document.getElementById('contact-form').addEventListener('submit', function (event) {
+       window.onload = function () {
+            var form = document.getElementById('contact-form');
+            var submitButton = form.querySelector('button[type=submit]');
+
+            form.addEventListener('submit', function (event) {
                 event.preventDefault();
+
+                // Add loading class to button
+                submitButton.classList.add('loading');
+                submitButton.disabled = true; // Disable t
     
                 // Get values from the form
                 var user_name = document.getElementsByName('user_name')[0].value;
@@ -48,13 +55,42 @@
                     .then(() => {
                         console.log('SUCCESS!');
                         toastr.success('Email successfully sent!', 'Success');
+                        form.reset();
                     }, (error) => {
                         console.log('FAILED...', error);
                         toastr.error('Failed to send email. Please try again.', 'Error');
-                    });
+
+                    })
+                    .finally(() => {
+                // Remove loading class and re-enable button
+                submitButton.classList.remove('loading');
+                submitButton.disabled = false;
+            });
             });
         }
     </script>
+    <style>
+        button[type=submit] {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    padding: 15px 20px; /* Padding */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+button[type=submit]:hover {
+    background-color: #45a049; /* Darker shade of green on hover */
+}
+
+/* Style for the loading state */
+button[type=submit].loading {
+    background-color: #ccc; /* Gray background for loading state */
+    cursor: default; /* Default cursor during loading */
+}
+
+    </style>
     
 
 </head>
